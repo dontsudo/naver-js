@@ -16,6 +16,8 @@ const options: CrawlerOptions = {
 };
 
 const extractNaverIdFromScript = (scriptText: string) => {
+  if (!scriptText) return "";
+
   // script 태그 내에서 아이디 추출
   const res = /wordBreak\(\$\("(.*)"\)\);/g.exec(scriptText);
   if (res.length === 0) return "";
@@ -62,20 +64,24 @@ class NaverCafeArticleClient extends BaseCrawler {
     return cafeMenuList.map((cafeMenu) => path.join(url, cafeMenu));
   }
 
-  public async getArticleList(boardUrl: string, page = 1, count = 15) {
+  public async getArticleList(boardUrl: string, page = 1, count = 50) {
     const articleList: NaverCafeArticleItem[] = [];
     const urlObj = new URL(boardUrl);
 
     urlObj.searchParams.set("search.page", JSON.stringify(page));
     urlObj.searchParams.set("userDisplay", JSON.stringify(count));
 
-    await this.page.goto(urlObj.href, { waitUntil: "networkidle" });
+    await this.page.goto(urlObj.href);
 
     const cafeMainFrame = this.page
       .frames()
       .find((frame) => frame.name() === "cafe_main");
 
     const $ = cheerio.load(await cafeMainFrame.content());
+
+    // 빈 페이지 처리
+    if ($("div.nodata").length > 0) return [];
+
     $("div.article-board > table > tbody > tr").each(function (_, el) {
       articleList.push({
         category: removeDuplicateSpaces(
