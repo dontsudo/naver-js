@@ -4,35 +4,31 @@ import playwright, {
   BrowserContextOptions,
   LaunchOptions,
   Page,
-} from "playwright";
+} from "playwright"
 
-export interface CrawlerOptions {
-  browser: LaunchOptions;
-  context: BrowserContextOptions;
+export interface ClientOptions {
+  browser: LaunchOptions
+  context: BrowserContextOptions
 }
 
-class BaseCrawler {
-  protected browser: Browser;
-  protected context: BrowserContext;
-  protected page: Page;
+class BaseClient {
+  protected browser?: Browser
+  protected context?: BrowserContext
+  protected page?: Page
 
-  constructor(private options: CrawlerOptions) {}
+  constructor(private options: ClientOptions) {}
 
   public async bootstrap() {
-    try {
-      this.browser = await playwright.chromium.launch(this.options.browser);
-      this.context = await this.browser.newContext(this.options.context);
-      this.page = await this.context.newPage();
-    } catch (error) {
-      console.error(error);
-    }
+    this.browser = await playwright.chromium.launch(this.options.browser)
+    this.context = await this.browser.newContext(this.options.context)
+    this.page = await this.context.newPage()
   }
 
   public async shutdown() {
-    await this.page.close();
-    await this.context.close();
-    await this.browser.close();
+    if (this.page) await this.page.close()
+    if (this.context) await this.context.close()
+    if (this.browser) await this.browser.close()
   }
 }
 
-export default BaseCrawler;
+export default BaseClient

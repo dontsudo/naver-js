@@ -1,12 +1,31 @@
 {
-  "name": "naver-cafe-id-extractor",
-  "version": "1.0.0",
+  "name": "naver-cafe-toolkit",
+  "version": "0.0.1",
+  "description": "Unofficial Naver Cafe Toolkit For Automation",
+  "engines": {
+    "node": ">=12"
+  },
+  "bugs": {
+    "url": "https://github.com/wannavi/naver-cafe-toolkit/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wannavi/naver-cafe-toolkit"
+  },
+  "keywords": [
+    "naver"
+  ],
+  "main": "./build/src",
+  "types": "./build/src/index.d.ts",
   "scripts": {
+    "build": "tsc",
+    "prettier": "prettier --write .",
+    "lint": "prettier --check . && eslint . --ext .ts && cspell '**/*' ",
+    "clean": "rm -rf ./build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "wannavi <chotnt741@gmail.com>",
+  "license": "MIT",
   "dependencies": {
     "cheerio": "1.0.0-rc.12",
     "dotenv": "^16.0.3",
@@ -17,6 +36,8 @@
   "devDependencies": {
     "@types/node": "^18.11.18",
     "@types/user-agents": "^1.0.2",
+    "eslint": "^8.33.0",
+    "prettier": "^2.8.3",
     "ts-node": "^10.9.1",
     "tslib": "^2.5.0",
     "typescript": "^4.9.4"

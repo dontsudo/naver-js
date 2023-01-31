@@ -1,24 +1,41 @@
 {
   "compilerOptions": {
+    /* Visit https://aka.ms/tsconfig.json to read more about this file */
+    // Recommended Node options have been incorporated from https://github.com/tsconfig/bases/blob/master/bases/node14.json
+
     "target": "ES2022",
-    "lib": ["ES2022", "dom"],
-    "rootDir": ".",
-    "outDir": "build",
-    "allowSyntheticDefaultImports": true,
-    "importHelpers": true,
-    "alwaysStrict": true,
-    "sourceMap": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitAny": false,
-    "noImplicitThis": false,
-    "strictNullChecks": false,
+    "module": "commonjs",
     "esModuleInterop": true,
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true
-  }
+
+    // Overrides default in order to remove "dom" because this package shouldn't assume the presence of browser APIs
+    "lib": ["ES2022", "DOM"],
+
+    // Emit location
+    "outDir": "build",
+
+    // Emit sourcemaps
+    "declarationMap": true,
+    "sourceMap": true,
+    "inlineSources": true,
+
+    // Emit type definitions
+    "declaration": true,
+
+    // Strict mode
+    "strict": true,
+
+    // Allow import package.json
+    "resolveJsonModule": true,
+
+    // Linter style rules
+    "noUnusedLocals": false, // Disabled because we use eslint for this.
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "forceConsistentCasingInFileNames": true
+  },
+
+  "include": ["src/**/*", "test/**/*"]
 }
