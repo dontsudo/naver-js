@@ -33,8 +33,8 @@ class NaverCafeClient extends BaseClient {
   private LOGIN_URL = "https://nid.naver.com/nidlogin.login"
   private MYINFO_URL = "https://nid.naver.com/user2/help/myInfoV2"
 
-  constructor(options: ClientOptions) {
-    super(options || defaultOptions)
+  constructor(options?: ClientOptions) {
+    super({ ...defaultOptions, ...options })
   }
 
   public readonly auth = {

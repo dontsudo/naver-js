@@ -7,8 +7,8 @@ import playwright, {
 } from "playwright"
 
 export interface ClientOptions {
-  browser: LaunchOptions
-  context: BrowserContextOptions
+  browser?: LaunchOptions
+  context?: BrowserContextOptions
 }
 
 class BaseClient {
