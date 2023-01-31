@@ -1,6 +1,6 @@
 {
   "name": "naver-cafe-toolkit",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Unofficial Naver Cafe Toolkit For Automation",
   "engines": {
     "node": ">=12"
