@@ -37,87 +37,109 @@ class NaverCafeClient extends BaseClient {
     super(options || defaultOptions)
   }
 
-  public async login(id: string, password: string) {
-    if (!this.browser || !this.page) {
-      throw new Error("브라우저가 실행되고 있지 않습니다.")
-    }
+  public readonly auth = {
+    login: async (id: string, password: string): Promise<void> => {
+      if (!this.browser || !this.page) {
+        throw new Error("브라우저가 실행되고 있지 않습니다.")
+      }
 
-    await this.page.goto(this.LOGIN_URL)
-    await this.page.fill("input#id", id)
-    await this.page.fill("input#pw", password)
+      await this.page.goto(this.LOGIN_URL)
+      await this.page.fill("input#id", id)
+      await this.page.fill("input#pw", password)
 
-    await this.page.click("button[type=submit]")
+      await this.page.click("button[type=submit]")
+    },
+
+    isLoggedIn: async (): Promise<boolean> => {
+      if (!this.browser || !this.page) {
+        throw new Error("브라우저가 실행되고 있지 않습니다.")
+      }
+
+      await this.page.goto(this.MYINFO_URL)
+      const currentURL = this.page.url()
+
+      return currentURL === this.MYINFO_URL
+    },
   }
 
-  public async isLoggedIn() {
-    if (!this.browser || !this.page) {
-      throw new Error("브라우저가 실행되고 있지 않습니다.")
-    }
+  public readonly category = {
+    /**
+     * Retrieve cafe's categories
+     * @param url 네이버 카페 URL
+     */
+    retrieve: async (url: string): Promise<string[]> => {
+      if (!this.browser || !this.page) {
+        throw new Error("브라우저가 실행되고 있지 않습니다.")
+      }
 
-    await this.page.goto(this.MYINFO_URL)
-    const currentURL = this.page.url()
+      await this.page.goto(url)
 
-    return currentURL === this.MYINFO_URL
+      const cafeMenuList = await Promise.all(
+        (
+          await this.page.$$("ul.cafe-menu-list > li > a")
+        ).map(cafeMenu => cafeMenu.getAttribute("href"))
+      )
+
+      return cafeMenuList.map(cafeMenu => path.join(url, cafeMenu || ""))
+    },
   }
 
-  public async getCafeCategoryList(url: string) {
-    if (!this.browser || !this.page) {
-      throw new Error("브라우저가 실행되고 있지 않습니다.")
-    }
+  public readonly article = {
+    /**
+     * 게시판에서 글 목록 가져오기
+     * @param boardUrl 게시판 주소
+     * @param page 페이지
+     * @param count 글 갯수
+     */
+    retrieve: async (
+      boardUrl: string,
+      page = 1,
+      count = 50
+    ): Promise<NaverCafeArticleItem[]> => {
+      if (!this.browser || !this.page) {
+        throw new Error("브라우저가 실행되고 있지 않습니다.")
+      }
 
-    await this.page.goto(url)
+      const articleList: NaverCafeArticleItem[] = []
+      const urlObj = new URL(boardUrl)
 
-    const cafeMenuList = await Promise.all(
-      (
-        await this.page.$$("ul.cafe-menu-list > li > a")
-      ).map(cafeMenu => cafeMenu.getAttribute("href"))
-    )
+      urlObj.searchParams.set("search.page", JSON.stringify(page))
+      urlObj.searchParams.set("userDisplay", JSON.stringify(count))
 
-    return cafeMenuList.map(cafeMenu => path.join(url, cafeMenu || ""))
-  }
+      await this.page.goto(urlObj.href)
 
-  public async getArticleList(boardUrl: string, page = 1, count = 50) {
-    if (!this.browser || !this.page) {
-      throw new Error("브라우저가 실행되고 있지 않습니다.")
-    }
+      const cafeMainFrame = this.page
+        .frames()
+        .find(frame => frame.name() === "cafe_main")
 
-    const articleList: NaverCafeArticleItem[] = []
-    const urlObj = new URL(boardUrl)
+      if (!cafeMainFrame) throw new Error("입력한 URL을 다시 확인해주세요")
 
-    urlObj.searchParams.set("search.page", JSON.stringify(page))
-    urlObj.searchParams.set("userDisplay", JSON.stringify(count))
+      const $ = cheerio.load(await cafeMainFrame.content())
 
-    await this.page.goto(urlObj.href)
+      // 빈 페이지 처리
+      if ($("div.nodata").length > 0) return []
 
-    const cafeMainFrame = this.page
-      .frames()
-      .find(frame => frame.name() === "cafe_main")
-
-    if (!cafeMainFrame) throw new Error("입력한 URL을 다시 확인해주세요")
-
-    const $ = cheerio.load(await cafeMainFrame.content())
-
-    // 빈 페이지 처리
-    if ($("div.nodata").length > 0) return []
-
-    $("div.article-board > table > tbody > tr").each(function (_, el) {
-      articleList.push({
-        category: removeDuplicateSpaces(
-          $(el).find("div.board-name").text().trim()
-        ),
-        title: removeDuplicateSpaces(
-          $(el).find("div.board-list").text().trim()
-        ),
-        author: removeDuplicateSpaces(
-          $(el).find("td.td_name > div.pers_nick_area").text().trim()
-        ),
-        authorId: extractNaverIdFromScript(
-          removeDuplicateSpaces($(el).find("td.td_name > script").text().trim())
-        ),
+      $("div.article-board > table > tbody > tr").each(function (_, el) {
+        articleList.push({
+          category: removeDuplicateSpaces(
+            $(el).find("div.board-name").text().trim()
+          ),
+          title: removeDuplicateSpaces(
+            $(el).find("div.board-list").text().trim()
+          ),
+          author: removeDuplicateSpaces(
+            $(el).find("td.td_name > div.pers_nick_area").text().trim()
+          ),
+          authorId: extractNaverIdFromScript(
+            removeDuplicateSpaces(
+              $(el).find("td.td_name > script").text().trim()
+            )
+          ),
+        })
       })
-    })
 
-    return articleList
+      return articleList
+    },
   }
 }
 
