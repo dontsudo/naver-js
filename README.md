@@ -1,5 +1,5 @@
 <div align="center">
-	<h1>Unofficial Naver Cafe Toolkit for JavaScript.</h1>
+	<h1>Naver Cafe Toolkit for JavaScript.</h1>
 	<p>Automation with playwright 🚀</p>
 </div>
 
