@@ -1,8 +1,9 @@
-# 네이버 카페 자동화 툴
+# naver-cafe-toolkit
 
-## 기능
+Unofficial Naver Cafe Toolkit with playwright.
 
-- 네이버 로그인 처리
-- 네이버 로그인 확인
-- 카페 게시물 긁어오기
-  - 네이버 ID, 닉네임, 제목, 카테고리
+## Usage
+
+```ts
+
+```

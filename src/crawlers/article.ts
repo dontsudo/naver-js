@@ -6,6 +6,7 @@ import { NaverCafeArticleItem } from "../items";
 import { removeDuplicateSpaces } from "../utils/string-util";
 
 const options: CrawlerOptions = {
+  browser: {},
   context: {
     locale: "ko-KR",
     extraHTTPHeaders: {
