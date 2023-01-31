@@ -7,10 +7,9 @@
 
 ## Installation
 
-```
+```bash
 npm install naver-cafe-toolkit
 ```
-
 
 ## Usage
 
@@ -30,7 +29,7 @@ await client.auth.login('YOUR_ID', 'YOUR_PW')
 const categories = await client.category.retrieve(NAVER_CAFE_URL)
 
 // # 2. Read Cafe's articles with url, page, and article count
-const articles = await client.article.retrieve(NAVER_CAFE_URL, 1, 50)
+const articles = await client.article.retrieve(NAVER_CAFE_BOARD_URL, 1, 50)
 
 // Gracefully shutdown
 await client.shutdown()
