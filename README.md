@@ -3,6 +3,15 @@
 	<p>Automation with playwright 🚀</p>
 </div>
 
+[![npm version](https://badge.fury.io/js/naver-cafe-toolkit.svg)](https://www.npmjs.com/package/naver-cafe-toolkit)
+
+## Installation
+
+```
+npm install naver-cafe-toolkit
+```
+
+
 ## Usage
 
 ### Quickstart
