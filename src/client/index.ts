@@ -5,7 +5,7 @@ import BaseClient, { ClientOptions } from "./base"
 import { NaverCafeArticleItem } from "../items"
 import { removeDuplicateSpaces } from "../utils/string-util"
 
-const options: ClientOptions = {
+const defaultOptions: ClientOptions = {
   browser: {},
   context: {
     locale: "ko-KR",
@@ -33,8 +33,8 @@ class NaverCafeClient extends BaseClient {
   private LOGIN_URL = "https://nid.naver.com/nidlogin.login"
   private MYINFO_URL = "https://nid.naver.com/user2/help/myInfoV2"
 
-  constructor() {
-    super(options)
+  constructor(options: ClientOptions) {
+    super(options || defaultOptions)
   }
 
   public async login(id: string, password: string) {

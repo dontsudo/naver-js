@@ -1,2 +1,3 @@
-export { default as Client } from "./crawlers/client"
+export { default as Client } from "./client"
+export { ClientOptions } from "./client/base"
 export { NaverCafeArticleItem } from "./items"
