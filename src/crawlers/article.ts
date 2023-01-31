@@ -1,4 +1,9 @@
+import * as cheerio from "cheerio";
+import path from "path";
+
 import BaseCrawler, { CrawlerOptions } from "./base";
+import { NaverCafeArticleItem } from "../items";
+import { removeDuplicateSpaces } from "../utils/string-util";
 
 const options: CrawlerOptions = {
   context: {
@@ -10,7 +15,15 @@ const options: CrawlerOptions = {
   },
 };
 
-class NaverCafeArticleCrawler extends BaseCrawler {
+const extractNaverIdFromScript = (scriptText: string) => {
+  // script 태그 내에서 아이디 추출
+  const res = /wordBreak\(\$\("(.*)"\)\);/g.exec(scriptText);
+  if (res.length === 0) return "";
+
+  return res[1].split("_")[1];
+};
+
+class NaverCafeArticleClient extends BaseCrawler {
   private LOGIN_URL = "https://nid.naver.com/nidlogin.login";
   private MYINFO_URL = "https://nid.naver.com/user2/help/myInfoV2";
 
@@ -26,6 +39,7 @@ class NaverCafeArticleCrawler extends BaseCrawler {
     await this.page.goto(this.LOGIN_URL);
     await this.page.fill("input#id", id);
     await this.page.fill("input#pw", password);
+
     await this.page.click("button[type=submit]");
   }
 
@@ -36,7 +50,51 @@ class NaverCafeArticleCrawler extends BaseCrawler {
     return currentURL === this.MYINFO_URL;
   }
 
-  public async goto(url: string) {}
+  public async getCafeCategoryList(url: string) {
+    await this.page.goto(url);
+
+    const cafeMenuList = await Promise.all(
+      (
+        await this.page.$$("ul.cafe-menu-list > li > a")
+      ).map((cafeMenu) => cafeMenu.getAttribute("href"))
+    );
+
+    return cafeMenuList.map((cafeMenu) => path.join(url, cafeMenu));
+  }
+
+  public async getArticleList(boardUrl: string, page = 1, count = 15) {
+    const articleList: NaverCafeArticleItem[] = [];
+    const urlObj = new URL(boardUrl);
+
+    urlObj.searchParams.set("search.page", JSON.stringify(page));
+    urlObj.searchParams.set("userDisplay", JSON.stringify(count));
+
+    await this.page.goto(urlObj.href, { waitUntil: "networkidle" });
+
+    const cafeMainFrame = this.page
+      .frames()
+      .find((frame) => frame.name() === "cafe_main");
+
+    const $ = cheerio.load(await cafeMainFrame.content());
+    $("div.article-board > table > tbody > tr").each(function (_, el) {
+      articleList.push({
+        category: removeDuplicateSpaces(
+          $(el).find("div.board-name").text().trim()
+        ),
+        title: removeDuplicateSpaces(
+          $(el).find("div.board-list").text().trim()
+        ),
+        author: removeDuplicateSpaces(
+          $(el).find("td.td_name > div.pers_nick_area").text().trim()
+        ),
+        authorId: extractNaverIdFromScript(
+          removeDuplicateSpaces($(el).find("td.td_name > script").text().trim())
+        ),
+      });
+    });
+
+    return articleList;
+  }
 }
 
-export default NaverCafeArticleCrawler;
+export default NaverCafeArticleClient;

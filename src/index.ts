@@ -1,9 +1,26 @@
-import NaverCafeArticleCrawler from "./crawlers/article";
+import "dotenv/config";
 
-(async () => {
-  const crawler = new NaverCafeArticleCrawler();
+import NaverCafeArticleClient from "./crawlers/article";
+import { NaverCafeArticleItem } from "./items";
 
-  await crawler.bootstrap();
+async function main() {
+  const client = new NaverCafeArticleClient();
 
-  await crawler.login("chotnt741", "k7663835*");
-})();
+  await client.bootstrap();
+  await client.login(process.env.NAVER_ID, process.env.NAVER_PW);
+
+  const cafeCategoryList = await client.getCafeCategoryList(
+    "https://cafe.naver.com/steamindiegame"
+  );
+  const 전체글보기 = cafeCategoryList[0];
+
+  let page = 1;
+  let articleList: NaverCafeArticleItem[];
+
+  do {
+    articleList = await client.getArticleList(전체글보기, page++);
+    console.log(articleList);
+  } while (articleList);
+}
+
+main();

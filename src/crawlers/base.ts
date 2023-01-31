@@ -14,7 +14,7 @@ class BaseCrawler {
   protected context: BrowserContext;
   protected page: Page;
 
-  constructor(private readonly options: CrawlerOptions) {}
+  constructor(private options: CrawlerOptions) {}
 
   public async bootstrap() {
     try {
