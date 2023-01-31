@@ -14,16 +14,17 @@ async function crawlWithUrlJob(boardUrl: string) {
     await client.bootstrap()
 
     let page = 1
-    let articleList: NaverCafeArticleItem[]
+    let items: NaverCafeArticleItem[]
 
     while (
-      (articleList = await client.article.retrieve(boardUrl, page++)).length > 0
+      (items = await client.article.retrieve(boardUrl, page++)).length > 0
     ) {
-      console.table(articleList)
+      console.table(items)
     }
   } catch (err) {
     console.error(err)
   } finally {
+    // this is best practice :)
     await client.shutdown()
   }
 }
