@@ -14,6 +14,9 @@ const client = new NaverCafeClient(options)
 // Bootstrap for headless chromium =)
 await client.bootstrap()
 
+// (Optional) Naver Login =)
+await client.login('YOUR_ID', 'YOUR_PW')
+
 // # 1. Get Cafe's categories with url
 const categories = await client.getCafeCategoryList(NAVER_CAFE_URL)
 
