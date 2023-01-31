@@ -26,7 +26,7 @@ const extractNaverIdFromScript = (scriptText: string) => {
   return res[1].split("_")[1];
 };
 
-class NaverCafeArticleClient extends BaseCrawler {
+class NaverCafeClient extends BaseCrawler {
   private LOGIN_URL = "https://nid.naver.com/nidlogin.login";
   private MYINFO_URL = "https://nid.naver.com/user2/help/myInfoV2";
 
@@ -104,4 +104,4 @@ class NaverCafeArticleClient extends BaseCrawler {
   }
 }
 
-export default NaverCafeArticleClient;
+export default NaverCafeClient;

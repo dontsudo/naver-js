@@ -1,8 +1,8 @@
-import NaverCafeArticleClient from "../crawlers/article";
-import { NaverCafeArticleItem } from "../items";
+import NaverCafeClient from "../src/crawlers/article";
+import { NaverCafeArticleItem } from "../src/items";
 
 export async function crawlWithUrlJob(
-  client: NaverCafeArticleClient,
+  client: NaverCafeClient,
   boardUrl: string
 ) {
   const result = [];
