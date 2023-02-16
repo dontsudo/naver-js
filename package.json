@@ -1,6 +1,6 @@
 {
   "name": "naver-js",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Unofficial Naver Cafe Toolkit For Automation",
   "engines": {
     "node": ">=12"
@@ -15,13 +15,13 @@
   "keywords": [
     "naver"
   ],
-  "main": "./build/src",
-  "types": "./build/src/index.d.ts",
+  "main": "./dist/src",
+  "types": "./dist/src/index.d.ts",
   "scripts": {
     "build": "tsc",
     "prettier": "prettier --write .",
     "lint": "prettier --check . && eslint . --ext .ts && cspell '**/*' ",
-    "clean": "rm -rf ./build",
+    "clean": "rm -rf ./dist",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "wannavi <chotnt741@gmail.com>",

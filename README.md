@@ -3,12 +3,12 @@
 	<p>Automation with playwright 🚀</p>
 </div>
 
-[![npm version](https://badge.fury.io/js/naver-cafe-toolkit.svg)](https://www.npmjs.com/package/naver-cafe-toolkit)
+[![npm version](https://badge.fury.io/js/naver-js.svg)](https://www.npmjs.com/package/naver-js)
 
 ## Installation
 
 ```bash
-npm install naver-cafe-toolkit
+npm install naver-js
 ```
 
 ## Usage
