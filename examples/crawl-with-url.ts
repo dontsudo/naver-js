@@ -1,7 +1,6 @@
-import "dotenv/config"
 import { Client, NaverCafeArticleItem } from "../src/"
 
-const CALMDOWN_CAFE_BOARD_URL =
+const CALMDOWN_MAN =
   "https://cafe.naver.com/ArticleList.nhn?search.clubid=29646865&search.menuid=71&search.boardtype=L"
 
 async function crawlWithUrlJob(boardUrl: string) {
@@ -29,4 +28,4 @@ async function crawlWithUrlJob(boardUrl: string) {
   }
 }
 
-crawlWithUrlJob(CALMDOWN_CAFE_BOARD_URL)
+crawlWithUrlJob(CALMDOWN_MAN)

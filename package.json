@@ -1,16 +1,16 @@
 {
-  "name": "naver-cafe-toolkit",
+  "name": "naver-js",
   "version": "0.0.2",
   "description": "Unofficial Naver Cafe Toolkit For Automation",
   "engines": {
     "node": ">=12"
   },
   "bugs": {
-    "url": "https://github.com/wannavi/naver-cafe-toolkit/issues"
+    "url": "https://github.com/wannavi/naver-js/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wannavi/naver-cafe-toolkit"
+    "url": "https://github.com/wannavi/naver-js"
   },
   "keywords": [
     "naver"
