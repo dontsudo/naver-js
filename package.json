@@ -6,11 +6,11 @@
     "node": ">=12"
   },
   "bugs": {
-    "url": "https://github.com/wannavi/naver-js/issues"
+    "url": "https://github.com/dontdonut/naver-js/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/wannavi/naver-js"
+    "url": "https://github.com/dontdonut/naver-js"
   },
   "keywords": [
     "naver"
